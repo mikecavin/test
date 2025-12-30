@@ -225,7 +225,7 @@ char *bit_range_str_min;
 char *bit_range_str_max;
 
 const char *bsgs_modes[5] = {"sequential","backward","both","random","dance"};
-const char *modes[7] = {"xpoint","address","bsgs","rmd160","pub2rmd","minikeys","vanity"};
+const char *modes[7] = {"bsgs","rmd160"};
 const char *cryptos[3] = {"btc","eth","all"};
 const char *publicsearch[3] = {"uncompress","compress","both"};
 const char *default_fileName = "addresses.txt";
@@ -621,12 +621,12 @@ int main(int argc, char **argv)	{
 				printf("[+] Matrix screen\n");
 			break;
 			case 'm':
-				switch(indexOf(optarg,modes,7)) {
-					case MODE_XPOINT: //xpoint
+				switch(indexOf(optarg,modes,2)) {
+					// case MODE_XPOINT: // REMOVED //xpoint
 						FLAGMODE = MODE_XPOINT;
 						printf("[+] Mode xpoint\n");
 					break;
-					case MODE_ADDRESS: //address
+					// case MODE_ADDRESS: // REMOVED //address
 						FLAGMODE = MODE_ADDRESS;
 						printf("[+] Mode address\n");
 					break;
@@ -639,16 +639,16 @@ int main(int argc, char **argv)	{
 						FLAGCRYPTO = CRYPTO_BTC;
 						printf("[+] Mode rmd160\n");
 					break;
-					case MODE_PUB2RMD:
+					// case MODE_PUB2RMD: // REMOVED
 						FLAGMODE = MODE_PUB2RMD;
 						printf("[+] Mode pub2rmd was removed\n");
 						exit(0);
 					break;
-					case MODE_MINIKEYS:
+					// case MODE_MINIKEYS: // REMOVED
 						FLAGMODE = MODE_MINIKEYS;
 						printf("[+] Mode minikeys\n");
 					break;
-					case MODE_VANITY:
+					// case MODE_VANITY: // REMOVED
 						FLAGMODE = MODE_VANITY;
 						printf("[+] Mode vanity\n");
 						if(vanity_bloom == NULL){
@@ -934,7 +934,7 @@ int main(int argc, char **argv)	{
 		}
 
 		switch(FLAGMODE)	{
-			case MODE_MINIKEYS:
+			// case MODE_MINIKEYS: // REMOVED
 			case MODE_RMD160:
 			case MODE_ADDRESS:
 			case MODE_XPOINT:
@@ -943,7 +943,7 @@ int main(int argc, char **argv)	{
 					exit(EXIT_FAILURE);
 				}
 			break;
-			case MODE_VANITY:
+			// case MODE_VANITY: // REMOVED
 				if(!readFileVanity(fileName))	{
 					fprintf(stderr,"[E] Unenexpected error\n");
 					exit(EXIT_FAILURE);
@@ -2115,10 +2115,10 @@ int main(int argc, char **argv)	{
 				case MODE_RMD160:
 					tid[j] = CreateThread(NULL, 0, thread_process, (void*)tt, 0, &s);
 				break;
-				case MODE_MINIKEYS:
+				// case MODE_MINIKEYS: // REMOVED
 					tid[j] = CreateThread(NULL, 0, thread_process_minikeys, (void*)tt, 0, &s);
 				break;
-				case MODE_VANITY:
+				// case MODE_VANITY: // REMOVED
 					tid[j] = CreateThread(NULL, 0, thread_process_vanity, (void*)tt, 0, &s);
 				break;
 #else
@@ -2127,10 +2127,10 @@ int main(int argc, char **argv)	{
 				case MODE_RMD160:
 					s = pthread_create(&tid[j],NULL,thread_process,(void *)tt);
 				break;
-				case MODE_MINIKEYS:
+				// case MODE_MINIKEYS: // REMOVED
 					s = pthread_create(&tid[j],NULL,thread_process_minikeys,(void *)tt);
 				break;
-				case MODE_VANITY:
+				// case MODE_VANITY: // REMOVED
 					s = pthread_create(&tid[j],NULL,thread_process_vanity,(void *)tt);
 				break;
 #endif
@@ -5817,7 +5817,6 @@ void writevanitykey(bool compressed,Int *key)	{
 #else
 	pthread_mutex_lock(&write_keys);
 #endif
-	keys = fopen("VANITYKEYFOUND.txt","a+");
 	if(keys != NULL)	{
 		fprintf(keys,"Vanity Private Key: %s\npubkey: %s\nAddress %s\nrmd160 %s\n",hextemp,public_key_hex,address,hexrmd);
 		fclose(keys);
@@ -6283,7 +6282,7 @@ bool readFileAddress(char *fileName)	{
 					return forceReadFileAddressEth(fileName);
 				}
 			break;
-			case MODE_MINIKEYS:
+			// case MODE_MINIKEYS: // REMOVED
 			case MODE_RMD160:
 				return forceReadFileAddress(fileName);
 			break;
